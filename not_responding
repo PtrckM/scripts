@@ -1,6 +1,9 @@
 #!/bin/zsh
 # script check unresponsive app on macos and kill it
-# download script, chmod +x not_responding and save it to /usr/local/bin/not_responding
+# download script: curl https://raw.githubusercontent.com/PtrckM/scripts/refs/heads/main/not_responding -o not_responding
+# make script executable: chmod +x not_responding
+# save and move it via: sudo mv not_responding /usr/local/bin/not_responding
+# run it by executing: not_responding
 
 echo "📦 Checking for unresponsive apps..."
 timestamp=$(date "+%Y-%m-%d_%H-%M-%S")
