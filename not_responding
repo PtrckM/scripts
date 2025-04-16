@@ -1,0 +1,37 @@
+#!/bin/zsh
+# script check unresponsive app and kill it
+# download script, chmod +x not_responding and save it to /usr/local/bin/not_responding
+
+echo "📦 Checking for unresponsive apps..."
+timestamp=$(date "+%Y-%m-%d_%H-%M-%S")
+log_file="/tmp/unresponsive_processes_$timestamp.log"
+
+# Get list of not responding apps using system_profiler
+not_responding=$(system_profiler SPApplicationsDataType 2>/dev/null | grep "Not Responding: Yes" -B5 | grep "Location:" | awk -F ": " '{print $2}')
+
+if [[ -z "$not_responding" ]]; then
+    echo "✅ No unresponsive apps found."
+    exit 0
+fi
+
+echo "🚨 Unresponsive apps found:"
+echo "$not_responding"
+echo "$not_responding" > "$log_file"
+
+# Try to kill each unresponsive app
+echo "\n🔪 Attempting to kill each unresponsive process..."
+
+for app_path in $not_responding; do
+    app_name=$(basename "$app_path")
+    pids=$(pgrep -ix "$app_name")
+
+    if [[ -z "$pids" ]]; then
+        echo "❌ Could not find running process for $app_name"
+    else
+        for pid in $pids; do
+            kill "$pid" && echo "✅ Killed $app_name (PID: $pid)" || echo "❌ Failed to kill $app_name (PID: $pid)"
+        done
+    fi
+done
+
+echo "\n📃 Log saved to $log_file"
