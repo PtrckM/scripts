@@ -1,5 +1,5 @@
 #!/bin/zsh
-# script check unresponsive app and kill it
+# script check unresponsive app on macos and kill it
 # download script, chmod +x not_responding and save it to /usr/local/bin/not_responding
 
 echo "📦 Checking for unresponsive apps..."
